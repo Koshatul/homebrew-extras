@@ -9,10 +9,14 @@ class Sslscan < Formula
   patch :DATA
 
   def install
-    args = %W[
-      CFLAGS=#{'-I' + Formula['openssl'].opt_prefix.to_s + '/include/'}
-      LDFLAGS=#{'-L' + Formula['openssl'].opt_prefix.to_s + '/lib/'}
-    ]
+    if build.with? 'openssl'
+      args = %W[
+        CFLAGS=#{'-I' + Formula['openssl'].opt_prefix.to_s + '/include/'}
+        LDFLAGS=#{'-L' + Formula['openssl'].opt_prefix.to_s + '/lib/'}
+      ]
+    else
+      args = %W[]
+    end
     system "make", *args
     bin.install "sslscan"
     man1.install "sslscan.1"
